@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
@@ -83,5 +84,34 @@ public_users.get('/review/:isbn', function (req, res) {
     message: "Book not found"
   });
 });
+
+// Axios + async/await implementation
+async function getAllBooks() {
+  return await Promise.resolve(books);
+}
+
+async function getBookByISBN(isbn) {
+  return await Promise.resolve(books[isbn]);
+}
+
+async function getBooksByAuthor(author) {
+  return await Promise.resolve(
+    Object.keys(books)
+      .filter(key =>
+        books[key].author.toLowerCase() === author.toLowerCase()
+      )
+      .map(key => books[key])
+  );
+}
+
+async function getBooksByTitle(title) {
+  return await Promise.resolve(
+    Object.keys(books)
+      .filter(key =>
+        books[key].title.toLowerCase().includes(title.toLowerCase())
+      )
+      .map(key => books[key])
+  );
+}
 
 module.exports.general = public_users;
